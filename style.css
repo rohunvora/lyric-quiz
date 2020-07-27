@@ -1,0 +1,25 @@
+.container-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.container-two {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.artists {
+  margin-bottom: 1rem;
+}
+
+hr {
+  margin: 2rem;
+}
+
+#submitQ1 {
+  margin-top: 1rem;
+}

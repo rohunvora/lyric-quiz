@@ -8,26 +8,35 @@
 </head>
 <body>
   <div class="container-one">
-    <h1>Pick Your Artist</h1>
-    <div class="artists">
-      <input type="radio" id="frank" name="artist" value="Frank Ocean">
-      <label for="frank">Frank Ocean</label>
-      <input type="radio" id="playboi" name="artist" value="Playboi Carti">
-      <label for="frank">Playboi Carti</label>
-      <input type="radio" id="drake" name="artist" value="Drake">
-      <label for="frank">Drake</label>
+    <h1>Pick An Album</h1>
+    <div class="albums">
+      <input type="radio" id="blonde" name="album" value="Frank Ocean - Blonde">
+      <label for="blonde">Frank Ocean - Blonde</label>
+      <input type="radio" id="dieLit" name="album" value="Playboi Carti - Die Lit">
+      <label for="dieLit">Playboi Carti - Die Lit</label>
+      <input type="radio" id="darkLaneDemoTapes" name="album" value="Drake - Dark Lane Demo Tapes">
+      <label for="darkLaneDemoTapes">Drake - Dark Lane Demo Tapes</label>
     </div>
-    <button type="submit">Start the Quiz</button>
+    <button type="submit" id="startQuiz">Start the Quiz</button>
   </div>
 <hr>
   <div class="container-two">
-    <h1>Frank Ocean</h1>
-    <p>Q1: Poolside Convo, ____________, last night</p>
-    <input type="text" id="Q1">
-    <input type="submit" id="submitQ1">
+    <div class="blondeQuiz" id="quizOne">
+      <h1>Frank Ocean - Blonde</h1>
+      <p id="Q1"></p>
+    </div>
+    <div class="playboiCartiQuiz" id="quizTwo">
+      <h1>Playboi Carti</h1>
+      <p>Q1: In New York I, ____________, hide it in my sock</p>
+    </div>
+    <div class="drakeQuiz" id="quizThree">
+      <h1>Drake</h1>
+      <p>Q1: Smoking weed under ___________, guess we'll never know where harvard gets us</p>
+    </div>
+
   </div>
 
-
+<!-- <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"> -->
 <script src="./app.js"></script>
 </body>
 </html>

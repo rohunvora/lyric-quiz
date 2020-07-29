@@ -1,2 +1,28 @@
 48544aa4f2a8481d9aea9574bdd42157
 
+let fullAlbumArray = [];
+
+fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=48544aa4f2a8481d9aea9574bdd42157')
+  .then(response => {
+    console.log(response)
+    return response.json()
+  })
+  .then (data => {
+    let trackList = data.message.body.track_list;
+    for (let i=0; i<trackList.length; i++) {
+      let trackID = trackList[i].track.track_id;
+      fullAlbumArray.push(trackID);
+    }
+    console.log(fullAlbumArray);
+  })
+
+
+
+
+
+  // Playboi Carti Artist ID: 28973015
+  // Artist ID fetch URL fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.search?q_artist=playboi&apikey=48544aa4f2a8481d9aea9574bdd42157')
+  // Playboi Carti Die Lit Album ID: 28848015
+  // Album ID fetch URL: fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=28973015&apikey=48544aa4f2a8481d9aea9574bdd42157')
+  // Long Time Intro Track ID: 149944932
+  // Album Tracks Fetch URL: fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=48544aa4f2a8481d9aea9574bdd42157')

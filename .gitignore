@@ -8,12 +8,8 @@ fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/alb
     return response.json()
   })
   .then (data => {
-    let trackList = data.message.body.track_list;
-    for (let i=0; i<trackList.length; i++) {
-      let trackID = trackList[i].track.track_id;
-      fullAlbumArray.push(trackID);
+    console.log(data)
     }
-    console.log(fullAlbumArray);
   })
 
 
@@ -26,3 +22,5 @@ fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/alb
   // Album ID fetch URL: fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=28973015&apikey=48544aa4f2a8481d9aea9574bdd42157')
   // Long Time Intro Track ID: 149944932
   // Album Tracks Fetch URL: fetch('https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=48544aa4f2a8481d9aea9574bdd42157')
+  // Drake Artist ID 33491453
+  // Dark Lane Demo Tapes ID 37930772

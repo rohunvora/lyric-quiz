@@ -7,7 +7,13 @@
   <title>Lyric Quiz</title>
 </head>
 <body>
-  <div class="container-one">
+  <div class="scoreBoxcontainer" id="scoreBoxContainer">
+    <div class="scorebox" id="scorebox">
+    <h1></h1>
+    </div>
+  </div>
+
+  <div class="container-one" id="top">
     <h1>Pick An Album</h1>
     <div class="albums">
       <input type="radio" id="blonde" name="album" value="Frank Ocean - Blonde">
@@ -20,24 +26,13 @@
     <button type="submit" id="startQuiz">Start the Quiz</button>
   </div>
 <hr>
-  <div class="container-two">
-    <div class="blondeQuiz" id="quizOne">
-      <h1>Frank Ocean - Blonde</h1>
-      <p id="Q1"></p>
-    </div>
-    <div class="playboiCartiQuiz" id="quizTwo">
-      <h1>Playboi Carti</h1>
-      <p id="Q2"></p>
-    </div>
-    <div class="drakeQuiz" id="quizThree">
+  <div class="container-two" id="container-two">
+    <div class="quiz" id="quiz">
       <h1></h1>
-      <p></p>
     </div>
   </div>
 
-  <div class="scorebox" id="scorebox">
-    <h1>Your Score: </h1>
-  </div>
+
 <!-- <script src="./test.js"></script> -->
 <script src="./app.js"></script>
 </body>

@@ -36,13 +36,26 @@ hr {
   display: none;
 }
 
-.scorebox {
+#scoreBoxContainer {
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+#scorebox {
   height: 200px;
   width: 200px;
   background-color: bisque;
   border: 2px solid black;
+  align-items: center;
 }
 
 h1 {
+  text-align: center;
+}
+
+p {
   text-align: center;
 }

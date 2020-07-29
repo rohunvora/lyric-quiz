@@ -1,9 +1,9 @@
 let blonde = document.getElementById("blonde");
 let dieLit= document.getElementById("dieLit");
 let darkLaneDemoTapes = document.getElementById("darkLaneDemoTapes");
-let blondeAlbumURL = "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey="
+let blondeAlbumURL = "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78"
 let fullAlbumArray = [];
-let blondeTracksURL = 'https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey='
+let blondeTracksURL = 'https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78'
 let startQuiz = document.getElementById("startQuiz")
 const inputBar = document.createElement("input")
 const submitButton = document.createElement("input")
@@ -12,7 +12,7 @@ submitButton.setAttribute("type", "submit");
 let blondeQuiz = document.querySelector("#quizOne");
 let nikesNumber = 114244840;
 let dieLitQuiz = document.querySelector("#quizTwo");
-let dieLitURL = "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=149944932&apikey="
+let dieLitURL = "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=149944932&apikey=b9be9239c6a2488ed6e77853bede6d78"
 let rightAnswer
 let scoreBox = document.getElementById("scorebox");
 let score = document.createElement("h1");
@@ -21,7 +21,7 @@ score.innerText = 0;
 let updatedScore = 0;
 let gameActive = false;
 let lyricArray = [];
-
+let finalLyricArray = [];
 
 
     // }
@@ -31,17 +31,17 @@ let lyricArray = [];
 // function that allows users to search an artist
 // allows users to pick an artist
 // allow users to pick an album
-startQuiz.onclick = async function generateQuiz() {
+startQuiz.onclick = function generateQuiz() {
   // turn game to active
   gameActive = true;
   // check which album it is
-  if (blonde.checked == true) {
     lyricArray = [];
-    getAlbumArray(blondeTracksURL).then(resultArray => {
+    finalLyricArray = [];
+  getAlbumArray(blondeTracksURL).then(async function (resultArray) {
       for (let i=0; i<resultArray.length; i++) {
         let eachTrackID = resultArray[i];
-        let eachTrackURL = `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=`
-        fetch(eachTrackURL)
+        let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
+        await fetch(eachTrackURL)
           .then(response => {
             return response.json()
           })
@@ -49,29 +49,35 @@ startQuiz.onclick = async function generateQuiz() {
             let lyricBody = data.message.body.lyrics.lyrics_body;
             lyricArray.push(lyricBody)
           })
-      }
-     console.log(lyricArray);
+        } return lyricArray
+    }).then(data => {
+      getQuestion(data, blondeQuiz);
+      submitButton.onclick = function checkAnswer() {
+        if (inputBar.value == rightAnswer) {
+          console.log("You are correct")
+          scoreTracker();
+          clearQuestion();
+          getQuestion(data, blondeQuiz);
+        } else {
+          console.log("Sorry the actual lyric was: " + rightAnswer)
+          clearQuestion();
+          getQuestion(data, blondeQuiz);
+        }
+      };
     })
 
-
-    submitButton.onclick = checkAnswer
     document.getElementById("quizOne").style.display = "block";
-  } else if (dieLit.checked == true) {
-    let tempQuestion = getQuestion(dieLitURL, dieLitQuiz);
-    document.getElementById("quizTwo").style.display = "block";
 
-  } else if (darkLaneDemoTapes.checked == true) {
-    document.getElementById("quizThree").style.display = "block";
-  }
-};
+
+    };
 
 // create array of track ID's
 async function getAlbumArray(url) {
   let res = await fetch(url)
   .then(response => {
-    console.log(response)
     return response.json()
   })
+  console.log(res)
   let fullAlbumArray = [];
     let trackList = res.message.body.track_list;
     for (let i = 0; i < trackList.length; i++) {
@@ -85,11 +91,12 @@ async function getAlbumArray(url) {
 //   console.log(resultArray);
 // });
 
-
+// set number to random number and pass it through as array index
 
 // fetch lyrics from API
-function getQuestion(array) {
-      let lyricBody = array[0];
+function getQuestion(array, quiz) {
+      let randArrayNum = Math.floor(Math.random() * array.length);
+      let lyricBody = array[randArrayNum];
       let arrayOfLines = lyricBody.split(/\r?\n/);
       arrayOfLines.pop();
       arrayOfLines.pop();
@@ -122,20 +129,18 @@ function getQuestion(array) {
     }
 // checking if the user matches the lyrics
 
-function checkAnswer() {
-  if (inputBar.value == rightAnswer) {
-    console.log("You are correct")
-    scoreTracker();
-    clearQuestion();
-    loadNewQuestion();
-    getQuestion();
-  } else {
-    console.log("Sorry the actual lyric was: " + rightAnswer)
-    clearQuestion();
-    loadNewQuestion();
-    getQuestion();
-  }
-};
+// function checkAnswer() {
+//   if (inputBar.value == rightAnswer) {
+//     console.log("You are correct")
+//     scoreTracker();
+//     clearQuestion();
+//     getQuestion();
+//   } else {
+//     console.log("Sorry the actual lyric was: " + rightAnswer)
+//     clearQuestion();
+//     getQuestion();
+//   }
+// };
 // if match add to the score if not don't add to the score
 const scoreTracker = () => {
   updatedScore += 1;
@@ -149,10 +154,6 @@ const clearQuestion = ()  => {
     document.getElementById("tempPost").innerText = "";
     inputBar.value = "";
 
-}
-
-const loadNewQuestion = () => {
-  let newTrackID = resultarray.shift()
 }
 // move on to the next question (total questions = number of tracks)
 
@@ -179,7 +180,7 @@ const loadNewQuestion = () => {
 // https://api.musixmatch.com/ws/1.1/
 // frank ocean artist id: 13928405
 // frank ocean blonde album id: 23915006
-// blonde track list fetch url "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey="
+// blonde track list fetch url "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=48544aa4f2a8481d9aea9574bdd42157"
 // nikes track id: 114244840
 
     // yourScore = yourScore + 1;

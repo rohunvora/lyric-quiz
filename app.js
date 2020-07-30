@@ -40,138 +40,55 @@ startQuiz.onclick = function generateQuiz() {
   lyricArray = [];
   finalLyricArray = [];
   if (blonde.checked == true) {
-    getAlbumArray(blondeTracksURL).then(async function (resultArray) {
-      for (let i = 0; i < resultArray.length; i++) {
-        let eachTrackID = resultArray[i];
-        let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
-        await fetch(eachTrackURL)
-          .then(response => {
-            return response.json()
-          })
-          .then(data => {
-            let lyricBody = data.message.body.lyrics.lyrics_body;
-            lyricArray.push(lyricBody)
-          })
-      } return lyricArray
-    }).then(data => {
-      getQuestion(data);
-      let questionsAnswered = 0;
-      let totalQuestions = data.length;
-      submitButton.onclick = function checkAnswer() {
-        questionsAnswered += 1;
-        questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
-        scoreBox.appendChild(questionsCount);
-        if (inputBar.value == rightAnswer) {
-          console.log("You are correct")
-          scoreTracker();
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            clearQuestion();
-            getQuestion(data);
-          }
-        } else {
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            console.log("Sorry the actual lyric was: " + rightAnswer)
-            clearQuestion();
-            getQuestion(data);
-          }
-        }
-      };
-    })
+    tempURL = blondeAlbumURL
   } else if (dieLit.checked == true) {
-    getAlbumArray(dieLitURL).then(async function (resultArray) {
-      for (let i = 0; i < resultArray.length; i++) {
-        let eachTrackID = resultArray[i];
-        let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
-        await fetch(eachTrackURL)
-          .then(response => {
-            return response.json()
-          })
-          .then(data => {
-            let lyricBody = data.message.body.lyrics.lyrics_body;
-            lyricArray.push(lyricBody)
-          })
-      } return lyricArray
-    }).then(data => {
-      getQuestion(data);
-      let questionsAnswered = 0;
-      let totalQuestions = data.length;
-      submitButton.onclick = function checkAnswer() {
-        questionsAnswered += 1;
-        questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
-        scoreBox.appendChild(questionsCount);
-        if (inputBar.value == rightAnswer) {
-          console.log("You are correct")
-          scoreTracker();
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            clearQuestion();
-            getQuestion(data);
-          }
-        } else {
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            console.log("Sorry the actual lyric was: " + rightAnswer)
-            clearQuestion();
-            getQuestion(data);
-          }
-        }
-      };
-    })
+    tempURL = dieLitURL
   } else if (darkLaneDemoTapes.checked == true) {
-    getAlbumArray(darkLaneDemoTapesURL).then(async function (resultArray) {
-      for (let i = 0; i < resultArray.length; i++) {
-        let eachTrackID = resultArray[i];
-        let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
-        await fetch(eachTrackURL)
-          .then(response => {
-            return response.json()
-          })
-          .then(data => {
-            let lyricBody = data.message.body.lyrics.lyrics_body;
-            lyricArray.push(lyricBody)
-          })
-      } return lyricArray
-    }).then(data => {
-      getQuestion(data);
-      let questionsAnswered = 0;
-      let totalQuestions = data.length;
-      submitButton.onclick = function checkAnswer() {
-        questionsAnswered += 1;
-        questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
-        scoreBox.appendChild(questionsCount);
-        if (inputBar.value == rightAnswer) {
-          console.log("You are correct")
-          scoreTracker();
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            clearQuestion();
-            getQuestion(data);
-          }
-        } else {
-          if (questionsAnswered === data.length) {
-            gameActive = false;
-            isGameOver();
-          } else {
-            console.log("Sorry the actual lyric was: " + rightAnswer)
-            clearQuestion();
-            getQuestion(data);
-          }
-        }
-      };
-    })
+    tempURL = darkLaneDemoTapesURL
   }
+  getAlbumArray(tempURL).then(async function (resultArray) {
+    for (let i = 0; i < resultArray.length; i++) {
+      let eachTrackID = resultArray[i];
+      let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
+      await fetch(eachTrackURL)
+        .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          let lyricBody = data.message.body.lyrics.lyrics_body;
+          lyricArray.push(lyricBody)
+        })
+    } return lyricArray
+  }).then(data => {
+    getQuestion(data);
+    let questionsAnswered = 0;
+    let totalQuestions = data.length;
+    submitButton.onclick = function checkAnswer() {
+      questionsAnswered += 1;
+      questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
+      scoreBox.appendChild(questionsCount);
+      if (inputBar.value == rightAnswer) {
+        console.log("You are correct")
+        scoreTracker();
+        if (questionsAnswered === data.length) {
+          gameActive = false;
+          isGameOver();
+        } else {
+          clearQuestion();
+          getQuestion(data);
+        }
+      } else {
+        if (questionsAnswered === data.length) {
+          gameActive = false;
+          isGameOver();
+        } else {
+          console.log("Sorry the actual lyric was: " + rightAnswer)
+          clearQuestion();
+          getQuestion(data);
+        }
+      }
+    };
+  })
   document.getElementById("quiz").style.display = "block";
   }
 // create array of track ID's

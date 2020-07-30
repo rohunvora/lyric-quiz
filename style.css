@@ -59,3 +59,15 @@ h1 {
 p {
   text-align: center;
 }
+
+#searchTwo {
+  display: none;
+}
+
+#startQuiz {
+  display: none;
+}
+
+button {
+  margin-top: 2rem;
+}

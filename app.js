@@ -1,218 +1,224 @@
+let punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 let blonde = document.getElementById("blonde");
 let dieLit = document.getElementById("dieLit");
 let darkLaneDemoTapes = document.getElementById("darkLaneDemoTapes");
-let blondeAlbumURL = "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78"
+let blondeAlbumURL =
+  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78";
 let fullAlbumArray = [];
-let blondeTracksURL = 'https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78'
-let startQuiz = document.getElementById("startQuiz")
-const inputBar = document.createElement("input")
-const submitButton = document.createElement("input")
+let blondeTracksURL =
+  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78";
+let startQuiz = document.getElementById("startQuiz");
+const inputBar = document.createElement("input");
+const submitButton = document.createElement("input");
 inputBar.setAttribute("type", "text");
 submitButton.setAttribute("type", "submit");
 let quizBlock = document.getElementById("quiz");
-let dieLitURL = "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=b9be9239c6a2488ed6e77853bede6d78"
-let darkLaneDemoTapesURL = "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=37930772&page=1&page_size=14&apikey=b9be9239c6a2488ed6e77853bede6d78"
-let rightAnswer
+let dieLitURL =
+  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=b9be9239c6a2488ed6e77853bede6d78";
+let darkLaneDemoTapesURL =
+  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=37930772&page=1&page_size=14&apikey=b9be9239c6a2488ed6e77853bede6d78";
+let rightAnswer;
 let scoreBox = document.getElementById("scorebox");
 let score = document.createElement("h1");
 let questionsCount = document.createElement("p");
 scoreBox.appendChild(score);
-score.innerText = "Your Score: \n"+ 0;
+score.innerText = "Your Score: \n" + 0;
 let updatedScore = 0;
 let gameActive = false;
 let lyricArray = [];
 let finalLyricArray = [];
 
+let docTop = document.getElementById("top");
+const searchBar = document.getElementById("searchTerm");
+let searchSubmit = document.getElementById("search");
+let searchHeader = document.getElementById("heading");
+let searchAlbum = document.getElementById("searchTwo");
+let tempAlbumID;
+let tempURL;
 
-    // }
-
-// lyric quiz
-// start screen describing how the quiz works
-// function that allows users to search an artist
-// allows users to pick an artist
-// allow users to pick an album
-startQuiz.onclick = function generateQuiz() {
-  document.getElementById("top").style.display = "none";
-  document.getElementById("scoreBoxContainer").style.display = "flex";
-  // turn game to active
-  gameActive = true;
-  // check which album it is
-  lyricArray = [];
-  finalLyricArray = [];
-  if (blonde.checked == true) {
-    tempURL = blondeAlbumURL
-  } else if (dieLit.checked == true) {
-    tempURL = dieLitURL
-  } else if (darkLaneDemoTapes.checked == true) {
-    tempURL = darkLaneDemoTapesURL
-  }
-  getAlbumArray(tempURL).then(async function (resultArray) {
-    for (let i = 0; i < resultArray.length; i++) {
-      let eachTrackID = resultArray[i];
-      let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`
-      await fetch(eachTrackURL)
-        .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          let lyricBody = data.message.body.lyrics.lyrics_body;
-          lyricArray.push(lyricBody)
-        })
-    } return lyricArray
-  }).then(data => {
-    getQuestion(data);
-    let questionsAnswered = 0;
-    let totalQuestions = data.length;
-    submitButton.onclick = function checkAnswer() {
-      questionsAnswered += 1;
-      questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
-      scoreBox.appendChild(questionsCount);
-      if (inputBar.value == rightAnswer) {
-        console.log("You are correct")
-        scoreTracker();
-        if (questionsAnswered === data.length) {
-          gameActive = false;
-          isGameOver();
-        } else {
-          clearQuestion();
-          getQuestion(data);
-        }
-      } else {
-        if (questionsAnswered === data.length) {
-          gameActive = false;
-          isGameOver();
-        } else {
-          console.log("Sorry the actual lyric was: " + rightAnswer)
-          clearQuestion();
-          getQuestion(data);
-        }
-      }
-    };
-  })
-  document.getElementById("quiz").style.display = "block";
-  }
 // create array of track ID's
 async function getAlbumArray(url) {
-  let res = await fetch(url)
-  .then(response => {
-    return response.json()
-  })
-  console.log(res)
-    let fullAlbumArray = [];
-    let trackList = res.message.body.track_list;
-    for (let i = 0; i < trackList.length; i++) {
+  let res = await fetch(url).then((response) => {
+    return response.json();
+  });
+  console.log(res);
+  let fullAlbumArray = [];
+  let trackList = res.message.body.track_list;
+  console.log("this is tracklist: ", trackList);
+  for (let i = 0; i < trackList.length; i++) {
+    if (trackList[i].track.has_lyrics == 1) {
       let trackID = trackList[i].track.track_id;
       fullAlbumArray.push(trackID);
     }
-    return (fullAlbumArray);
+  }
+  return fullAlbumArray;
+}
+
+searchSubmit.onclick = function pullArtistId() {
+  fetch(
+    `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.search?q_artist=${searchBar.value}&apikey=b9be9239c6a2488ed6e77853bede6d78`
+  )
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((data) => {
+      let artistID = data.message.body.artist_list[0].artist.artist_id;
+      fetchAlbums(artistID);
+    });
 };
 
-// getAlbumArray(blondeTracksURL).then(resultArray => {
-//   console.log(resultArray);
-// });
+function fetchAlbums(artistID) {
+  fetch(
+    `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=${artistID}&page=1&page_size=100&g_album_name=1&apikey=48544aa4f2a8481d9aea9574bdd42157`
+  )
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((data) => {
+      searchHeader.innerText = "Now, Search the Album";
+      searchBar.value = "";
+      searchSubmit.style.display = "none";
+      searchAlbum.style.display = "block";
 
-// set number to random number and pass it through as array index
+      let albumList = data.message.body.album_list;
 
-// fetch lyrics from API
+      searchAlbum.onclick = function getAlbum(album) {
+        let matchingAlbum = albumList.filter((album) => {
+          return (
+            album.album.album_name.toLowerCase() ==
+            searchBar.value.toLowerCase()
+          );
+        });
+        tempAlbumID = matchingAlbum[0].album.album_id;
+        console.log(tempAlbumID);
+        tempURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=${tempAlbumID}&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78`;
+        searchAlbum.style.display = "none";
+        searchBar.style.display = "none";
+        startQuiz.style.display = "block";
+      };
+    });
+}
+startQuiz.onclick = function generateQuiz() {
+  document.getElementById("top").style.display = "none";
+  document.getElementById("scoreBoxContainer").style.display = "flex";
+  gameActive = true;
+  lyricArray = [];
+  finalLyricArray = [];
+  console.log("This is the tempURL: ", tempURL);
+  getAlbumArray(tempURL)
+    .then(async function (resultArray) {
+      for (let i = 0; i < resultArray.length; i++) {
+        let eachTrackID = resultArray[i];
+        let eachTrackURL = `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${eachTrackID}&apikey=b9be9239c6a2488ed6e77853bede6d78`;
+        await fetch(eachTrackURL)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            let lyricBody = data.message.body.lyrics.lyrics_body;
+            var rawLetters = lyricBody.split("");
+            var cleanLetters = rawLetters.filter(letter => {
+              return punctuation.indexOf(letter) === -1;
+            });
+            var cleanString = cleanLetters.join("");
+            lyricArray.push(cleanString);
+            // let trackName = trackList[i].track.track_name
+            // trackNameArray.push(trackName);
+          });
+      }
+      return lyricArray;
+    })
+    .then((data) => {
+      getQuestion(data);
+      let questionsAnswered = 0;
+      let totalQuestions = data.length;
+      submitButton.onclick = function checkAnswer() {
+
+        questionsAnswered += 1;
+        questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
+        scoreBox.appendChild(questionsCount);
+        if (inputBar.value == rightAnswer) {
+          console.log("You are correct");
+          scoreTracker();
+          if (questionsAnswered === data.length) {
+            gameActive = false;
+            isGameOver();
+          } else {
+            clearQuestion();
+            getQuestion(data);
+          }
+        } else {
+          if (questionsAnswered === data.length) {
+            gameActive = false;
+            isGameOver();
+          } else {
+            console.log("Sorry the actual lyric was: " + rightAnswer);
+            clearQuestion();
+            getQuestion(data);
+          }
+        }
+      };
+    });
+  document.getElementById("quiz").style.display = "block";
+};
+
 function getQuestion(array) {
-      let randArrayNum = Math.floor(Math.random() * array.length);
-      let lyricBody = array[randArrayNum];
-      let arrayOfLines = lyricBody.split(/\r?\n/);
-      arrayOfLines.pop();
-      arrayOfLines.pop();
-      arrayOfLines.pop();
-      let randMax = arrayOfLines.length
-      let randNum = Math.floor(Math.random() * randMax);
-      let randomIndex = arrayOfLines[randNum];
-      let previousLine = arrayOfLines[(randNum - 1)];
-      let postLine = arrayOfLines[(randNum + 1)];
-      let splitRandomIndex = randomIndex.split(" ");
-      let randTwoMax = splitRandomIndex.length;
-      let randNumTwo = Math.floor(Math.random() * randTwoMax);
-      rightAnswer = splitRandomIndex[randNumTwo];
-      splitRandomIndex[randNumTwo] = " ________ ";
-      let finalQuestion = splitRandomIndex.join(" ");
-      let questionElement = document.createElement("p");
-      questionElement.setAttribute("id", "tempQ")
-      let previousLineElement = document.createElement("p");
-      previousLineElement.setAttribute("id", "tempPrev")
-      let postLineElement = document.createElement("p");
-      postLineElement.setAttribute("id", "tempPost")
-      previousLineElement.innerText = previousLine;
-      postLineElement.innerText = postLine;
-      questionElement.innerText = finalQuestion;
-      quizBlock.appendChild(previousLineElement);
-      quizBlock.appendChild(questionElement);
-      quizBlock.appendChild(postLineElement);
-      quizBlock.appendChild(inputBar);
-      quizBlock.appendChild(submitButton);
-    }
-// checking if the user matches the lyrics
+  console.log("These are the lyrics: ", array);
+  let randArrayNum = Math.floor(Math.random() * array.length);
+  let lyricBody = array[randArrayNum];
+  let arrayOfLines = lyricBody.split(/\r?\n/);
+  arrayOfLines.pop();
+  arrayOfLines.pop();
+  arrayOfLines.pop();
+  let randMax = arrayOfLines.length;
+  let randNum = Math.floor(Math.random() * randMax);
+  let randomIndex = arrayOfLines[randNum];
+  let previousLine = arrayOfLines[randNum - 1];
+  let postLine = arrayOfLines[randNum + 1];
+  let splitRandomIndex = randomIndex.split(" ");
+  let randTwoMax = splitRandomIndex.length;
+  let randNumTwo = Math.floor(Math.random() * randTwoMax);
+  rightAnswer = splitRandomIndex[randNumTwo];
+  splitRandomIndex[randNumTwo] = " ________ ";
+  let finalQuestion = splitRandomIndex.join(" ");
+  let questionElement = document.createElement("p");
+  questionElement.setAttribute("id", "tempQ");
+  let previousLineElement = document.createElement("p");
+  previousLineElement.setAttribute("id", "tempPrev");
+  let postLineElement = document.createElement("p");
+  postLineElement.setAttribute("id", "tempPost");
+  if (previousLine != undefined) {
+    previousLineElement.innerText = previousLine;
+  }
+  if (postLine != undefined) {
+    postLineElement.innerText = postLine;
+  }
+  questionElement.innerText = finalQuestion;
+  quizBlock.appendChild(previousLineElement);
+  quizBlock.appendChild(questionElement);
+  quizBlock.appendChild(postLineElement);
+  quizBlock.appendChild(inputBar);
+  quizBlock.appendChild(submitButton);
+}
 
-// function checkAnswer() {
-//   if (inputBar.value == rightAnswer) {
-//     console.log("You are correct")
-//     scoreTracker();
-//     clearQuestion();
-//     getQuestion();
-//   } else {
-//     console.log("Sorry the actual lyric was: " + rightAnswer)
-//     clearQuestion();
-//     getQuestion();
-//   }
-// };
-// if match add to the score if not don't add to the score
 const scoreTracker = () => {
   updatedScore += 1;
   score.innerText = "Your Score: \n" + updatedScore;
-}
+};
 
-// clear current question
-const clearQuestion = ()  => {
-    document.getElementById("tempQ").remove();
-    document.getElementById("tempPrev").remove();
-    document.getElementById("tempPost").remove();
-    inputBar.value = "";
-
-}
+const clearQuestion = () => {
+  document.getElementById("tempQ").remove();
+  document.getElementById("tempPrev").remove();
+  document.getElementById("tempPost").remove();
+  inputBar.value = "";
+};
 
 const isGameOver = () => {
   if (gameActive === false) {
     document.getElementById("container-two").style.display = "none";
     score.innerText = "Your Final Score: \n" + updatedScore;
   }
-}
-
-// move on to the next question (total questions = number of tracks)
-
-// give the user a final score out of the number of tracks
-// allow them to restart the game (clear everything out)
-
-
-
-
-
-
-
-
-
-
-
-
-//select random index from the array
-// split the array by spaces into a new array
-// select a random index to replace with _________
-// return a string
-
-
-// https://api.musixmatch.com/ws/1.1/
-// frank ocean artist id: 13928405
-// frank ocean blonde album id: 23915006
-// blonde track list fetch url "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=48544aa4f2a8481d9aea9574bdd42157"
-// nikes track id: 114244840
-
-    // yourScore = yourScore + 1;
-
-// let yourScore = 0;
-// let yourScoreDisplay = document.createElement("h1")
-// blondeQuiz.appendChild(yourScoreDisplay);
+};

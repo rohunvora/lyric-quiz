@@ -1,22 +1,10 @@
-let punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-let blonde = document.getElementById("blonde");
-let dieLit = document.getElementById("dieLit");
-let darkLaneDemoTapes = document.getElementById("darkLaneDemoTapes");
-let blondeAlbumURL =
-  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78";
-let fullAlbumArray = [];
-let blondeTracksURL =
-  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=23915006&page=1&page_size=17&apikey=b9be9239c6a2488ed6e77853bede6d78";
+// Define Elements and Variables for Gameplay
 let startQuiz = document.getElementById("startQuiz");
 const inputBar = document.createElement("input");
 const submitButton = document.createElement("input");
 inputBar.setAttribute("type", "text");
 submitButton.setAttribute("type", "submit");
 let quizBlock = document.getElementById("quiz");
-let dieLitURL =
-  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=28848015&page=1&page_size=19&apikey=b9be9239c6a2488ed6e77853bede6d78";
-let darkLaneDemoTapesURL =
-  "https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=37930772&page=1&page_size=14&apikey=b9be9239c6a2488ed6e77853bede6d78";
 let rightAnswer;
 let scoreBox = document.getElementById("scorebox");
 let score = document.createElement("h1");
@@ -25,18 +13,27 @@ scoreBox.appendChild(score);
 score.innerText = "Your Score: \n" + 0;
 let updatedScore = 0;
 let gameActive = false;
-let lyricArray = [];
-let finalLyricArray = [];
+
+//Declare Elements and Variables for Acquiring the Album Data from the User
 
 let docTop = document.getElementById("top");
 const searchBar = document.getElementById("searchTerm");
 let searchSubmit = document.getElementById("search");
 let searchHeader = document.getElementById("heading");
 let searchAlbum = document.getElementById("searchTwo");
+
+// Global Variables
+let fullAlbumArray = [];
+let lyricArray = [];
+let finalLyricArray = [];
+
 let tempAlbumID;
 let tempURL;
 
-// create array of track ID's
+let punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+
+
+// Fetch with the Album ID to Create an Array of Track ID's
 async function getAlbumArray(url) {
   let res = await fetch(url).then((response) => {
     return response.json();
@@ -54,6 +51,7 @@ async function getAlbumArray(url) {
   return fullAlbumArray;
 }
 
+// Once the user types in an artist, we fetch that string from the API and return the first artist that matches that query.
 searchSubmit.onclick = function pullArtistId() {
   fetch(
     `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.search?q_artist=${searchBar.value}&apikey=b9be9239c6a2488ed6e77853bede6d78`
@@ -68,6 +66,7 @@ searchSubmit.onclick = function pullArtistId() {
     });
 };
 
+// We use the Artist ID to pull an array of albums that the artist has made.
 function fetchAlbums(artistID) {
   fetch(
     `https://pacific-atoll-34074.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=${artistID}&page=1&page_size=100&g_album_name=1&apikey=48544aa4f2a8481d9aea9574bdd42157`
@@ -83,6 +82,8 @@ function fetchAlbums(artistID) {
       searchAlbum.style.display = "block";
 
       let albumList = data.message.body.album_list;
+
+      // User Searches the Album within our Album Array
 
       searchAlbum.onclick = function getAlbum(album) {
         let matchingAlbum = albumList.filter((album) => {
@@ -100,6 +101,7 @@ function fetchAlbums(artistID) {
       };
     });
 }
+// Generate the Quiz
 startQuiz.onclick = function generateQuiz() {
   document.getElementById("top").style.display = "none";
   document.getElementById("scoreBoxContainer").style.display = "flex";
@@ -107,6 +109,8 @@ startQuiz.onclick = function generateQuiz() {
   lyricArray = [];
   finalLyricArray = [];
   console.log("This is the tempURL: ", tempURL);
+
+  // Iterate through the Album Array to Get the Lyrics for Each Track
   getAlbumArray(tempURL)
     .then(async function (resultArray) {
       for (let i = 0; i < resultArray.length; i++) {
@@ -125,16 +129,17 @@ startQuiz.onclick = function generateQuiz() {
             });
             var cleanString = cleanLetters.join("");
             lyricArray.push(cleanString);
-            // let trackName = trackList[i].track.track_name
-            // trackNameArray.push(trackName);
           });
       }
       return lyricArray;
     })
     .then((data) => {
+      // Get the Question
       getQuestion(data);
       let questionsAnswered = 0;
       let totalQuestions = data.length;
+
+      //Check Answers
       submitButton.onclick = function checkAnswer() {
 
         questionsAnswered += 1;
@@ -165,6 +170,7 @@ startQuiz.onclick = function generateQuiz() {
   document.getElementById("quiz").style.display = "block";
 };
 
+// Create the Question
 function getQuestion(array) {
   console.log("These are the lyrics: ", array);
   let randArrayNum = Math.floor(Math.random() * array.length);

@@ -13,6 +13,9 @@ scoreBox.appendChild(score);
 score.innerText = "Your Score: \n" + 0;
 let updatedScore = 0;
 let gameActive = false;
+let prevRightAnswer = document.createElement("p");
+prevRightAnswer.setAttribute("id", "prevAnswer");
+prevRightAnswer.style.color = "red";
 
 //Declare Elements and Variables for Acquiring the Album Data from the User
 
@@ -105,6 +108,7 @@ function fetchAlbums(artistID) {
 startQuiz.onclick = function generateQuiz() {
   document.getElementById("top").style.display = "none";
   document.getElementById("scoreBoxContainer").style.display = "flex";
+
   gameActive = true;
   lyricArray = [];
   finalLyricArray = [];
@@ -121,7 +125,6 @@ startQuiz.onclick = function generateQuiz() {
             return response.json();
           })
           .then((data) => {
-            console.log(data);
             let lyricBody = data.message.body.lyrics.lyrics_body;
             var rawLetters = lyricBody.split("");
             var cleanLetters = rawLetters.filter(letter => {
@@ -141,7 +144,7 @@ startQuiz.onclick = function generateQuiz() {
 
       //Check Answers
       submitButton.onclick = function checkAnswer() {
-
+        prevRightAnswer.innerText = ""
         questionsAnswered += 1;
         questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
         scoreBox.appendChild(questionsCount);
@@ -161,6 +164,8 @@ startQuiz.onclick = function generateQuiz() {
             isGameOver();
           } else {
             console.log("Sorry the actual lyric was: " + rightAnswer);
+            prevRightAnswer.innerText = "Sorry, the right answer was: \n" + rightAnswer;
+            scoreBox.appendChild(prevRightAnswer);
             clearQuestion();
             getQuestion(data);
           }
@@ -172,7 +177,6 @@ startQuiz.onclick = function generateQuiz() {
 
 // Create the Question
 function getQuestion(array) {
-  console.log("These are the lyrics: ", array);
   let randArrayNum = Math.floor(Math.random() * array.length);
   let lyricBody = array[randArrayNum];
   let arrayOfLines = lyricBody.split(/\r?\n/);
@@ -182,32 +186,65 @@ function getQuestion(array) {
   let randMax = arrayOfLines.length;
   let randNum = Math.floor(Math.random() * randMax);
   let randomIndex = arrayOfLines[randNum];
-  let previousLine = arrayOfLines[randNum - 1];
-  let postLine = arrayOfLines[randNum + 1];
-  let splitRandomIndex = randomIndex.split(" ");
-  let randTwoMax = splitRandomIndex.length;
-  let randNumTwo = Math.floor(Math.random() * randTwoMax);
-  rightAnswer = splitRandomIndex[randNumTwo];
-  splitRandomIndex[randNumTwo] = " ________ ";
-  let finalQuestion = splitRandomIndex.join(" ");
-  let questionElement = document.createElement("p");
-  questionElement.setAttribute("id", "tempQ");
-  let previousLineElement = document.createElement("p");
-  previousLineElement.setAttribute("id", "tempPrev");
-  let postLineElement = document.createElement("p");
-  postLineElement.setAttribute("id", "tempPost");
-  if (previousLine != undefined) {
-    previousLineElement.innerText = previousLine;
+  if (randomIndex === ""){
+    arrayOfLines.splice(randNum);
+    let tempRandNum = Math.floor(Math.random() * randMax - 1);
+    randomIndex = arrayOfLines[tempRandNum];
+    console.log(randomIndex)
+    let previousLine = arrayOfLines[tempRandNum - 1];
+    let postLine = arrayOfLines[tempRandNum + 1];
+    let splitRandomIndex = randomIndex.split(" ");
+    let randTwoMax = splitRandomIndex.length;
+    let randNumTwo = Math.floor(Math.random() * randTwoMax);
+    rightAnswer = splitRandomIndex[randNumTwo];
+    splitRandomIndex[randNumTwo] = " ________ ";
+    let finalQuestion = splitRandomIndex.join(" ");
+    let questionElement = document.createElement("p");
+    questionElement.setAttribute("id", "tempQ");
+    let previousLineElement = document.createElement("p");
+    previousLineElement.setAttribute("id", "tempPrev");
+    let postLineElement = document.createElement("p");
+    postLineElement.setAttribute("id", "tempPost");
+    if (previousLine != undefined) {
+      previousLineElement.innerText = previousLine;
+    }
+    if (postLine != undefined) {
+      postLineElement.innerText = postLine;
+    }
+    questionElement.innerText = finalQuestion;
+    quizBlock.appendChild(previousLineElement);
+    quizBlock.appendChild(questionElement);
+    quizBlock.appendChild(postLineElement);
+    quizBlock.appendChild(inputBar);
+    quizBlock.appendChild(submitButton);
+  } else {
+      let previousLine = arrayOfLines[randNum - 1];
+      let postLine = arrayOfLines[randNum + 1];
+      let splitRandomIndex = randomIndex.split(" ");
+      let randTwoMax = splitRandomIndex.length;
+      let randNumTwo = Math.floor(Math.random() * randTwoMax);
+      rightAnswer = splitRandomIndex[randNumTwo];
+      splitRandomIndex[randNumTwo] = " ________ ";
+      let finalQuestion = splitRandomIndex.join(" ");
+      let questionElement = document.createElement("p");
+      questionElement.setAttribute("id", "tempQ");
+      let previousLineElement = document.createElement("p");
+      previousLineElement.setAttribute("id", "tempPrev");
+      let postLineElement = document.createElement("p");
+      postLineElement.setAttribute("id", "tempPost");
+      if (previousLine != undefined) {
+        previousLineElement.innerText = previousLine;
+      }
+      if (postLine != undefined) {
+        postLineElement.innerText = postLine;
+      }
+      questionElement.innerText = finalQuestion;
+      quizBlock.appendChild(previousLineElement);
+      quizBlock.appendChild(questionElement);
+      quizBlock.appendChild(postLineElement);
+      quizBlock.appendChild(inputBar);
+      quizBlock.appendChild(submitButton);
   }
-  if (postLine != undefined) {
-    postLineElement.innerText = postLine;
-  }
-  questionElement.innerText = finalQuestion;
-  quizBlock.appendChild(previousLineElement);
-  quizBlock.appendChild(questionElement);
-  quizBlock.appendChild(postLineElement);
-  quizBlock.appendChild(inputBar);
-  quizBlock.appendChild(submitButton);
 }
 
 const scoreTracker = () => {

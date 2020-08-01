@@ -4,6 +4,8 @@ const inputBar = document.createElement("input");
 const submitButton = document.createElement("input");
 inputBar.setAttribute("type", "text");
 submitButton.setAttribute("type", "submit");
+inputBar.setAttribute("id", "answerBar")
+submitButton.setAttribute("id", "answerButton")
 let quizBlock = document.getElementById("quiz");
 let rightAnswer;
 let scoreBox = document.getElementById("scorebox");
@@ -79,7 +81,7 @@ function fetchAlbums(artistID) {
       return response.json();
     })
     .then((data) => {
-      searchHeader.innerText = "Now, Search the Album";
+      searchHeader.innerText = "now, search the album.";
       searchBar.value = "";
       searchSubmit.style.display = "none";
       searchAlbum.style.display = "block";
@@ -148,7 +150,7 @@ startQuiz.onclick = function generateQuiz() {
         questionsAnswered += 1;
         questionsCount.innerText = questionsAnswered + " / " + totalQuestions;
         scoreBox.appendChild(questionsCount);
-        if (inputBar.value == rightAnswer) {
+        if (inputBar.value.toLowerCase() == rightAnswer.toLowerCase()) {
           console.log("You are correct");
           scoreTracker();
           if (questionsAnswered === data.length) {
@@ -165,7 +167,7 @@ startQuiz.onclick = function generateQuiz() {
           } else {
             console.log("Sorry the actual lyric was: " + rightAnswer);
             prevRightAnswer.innerText = "Sorry, the right answer was: \n" + rightAnswer;
-            scoreBox.appendChild(prevRightAnswer);
+            quizBlock.appendChild(prevRightAnswer);
             clearQuestion();
             getQuestion(data);
           }
@@ -187,8 +189,7 @@ function getQuestion(array) {
   let randNum = Math.floor(Math.random() * randMax);
   let randomIndex = arrayOfLines[randNum];
   if (randomIndex === ""){
-    arrayOfLines.splice(randNum);
-    let tempRandNum = Math.floor(Math.random() * randMax - 1);
+    let tempRandNum = Math.floor(Math.random() * randMax);
     randomIndex = arrayOfLines[tempRandNum];
     console.log(randomIndex)
     let previousLine = arrayOfLines[tempRandNum - 1];

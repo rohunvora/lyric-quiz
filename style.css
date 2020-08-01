@@ -1,3 +1,8 @@
+* {
+    font-family: sans-serif;
+    background-color: #eae7dc;
+}
+
 .container-one {
   display: flex;
   flex-direction: column;
@@ -40,28 +45,52 @@ hr {
   display: none;
   justify-content: center;
   align-items: center;
-
 }
 
 
 #scorebox {
   height: 200px;
   width: 200px;
-  background-color: bisque;
+  background-color: #eae7dc;
   border: 2px solid black;
   align-items: center;
 }
 
 h1 {
   text-align: center;
+  margin-top: 2rem;
+  color: #123c69;
+  font-family: 'Roboto Mono', monospace;
 }
 
 p {
   text-align: center;
+  color: #123C69;
+  font-family: 'Merriweather', serif;
 }
 
 #searchTwo {
   display: none;
+}
+
+#prevAnswer {
+  white-space: nowrap;
+  font-size: smaller;
+}
+
+#searchTerm {
+  font-family:'Roboto Mono', monospace;
+  margin-top: 1.5rem;
+  color: #123C69;
+  width: 150px;
+  padding: 6px 15px 6px 35px;
+  border-radius: 20px;
+  box-shadow: 0 1px 0 #ccc inset;
+  transition:500ms all ease;
+}
+
+#searchTerm:hover {
+  width:180px;
 }
 
 #startQuiz {
@@ -70,4 +99,57 @@ p {
 
 button {
   margin-top: 2rem;
+  display:inline-block;
+  padding:0.3em 1.2em;
+  border:0.16em solid #123c69;
+  border-radius:2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto Mono', monospace;
+  font-weight:300;
+  color: #123C69;
+  text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+  text-align:center;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background-color: #123c69;
+  color: #eae7dc;
+}
+
+#answerBar {
+  font-family:'Roboto Mono', monospace;
+  margin-top: 1.5rem;
+  color: #123C69;
+  width: 150px;
+  padding: 6px 15px 6px 35px;
+  border-radius: 20px;
+  box-shadow: 0 1px 0 #ccc inset;
+  transition:500ms all ease;
+}
+
+#answerBar:hover {
+  width:180px;
+}
+
+#answerButton {
+    margin-top: 2rem;
+  display:inline-block;
+  padding:0.3em 1.2em;
+  border:0.16em solid #123c69;
+  border-radius:2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto Mono', monospace;
+  font-weight:300;
+  color: #123C69;
+  text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+  text-align:center;
+  transition: all 0.2s;
+}
+
+#answerButton:hover {
+  background-color: #123c69;
+  color: #eae7dc;
 }
